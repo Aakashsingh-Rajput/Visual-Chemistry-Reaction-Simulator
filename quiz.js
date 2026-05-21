@@ -151,6 +151,110 @@ const QuizModules = [
                 feedback: "Perfect! The spark supplies the activation energy needed to break all existing C-H and O=O bonds. The atoms then form stronger C=O and H-O bonds, releasing a large amount of energy."
             }
         ]
+    },
+    {
+        id: "salt_quiz",
+        title: "Synthesis of Table Salt",
+        questions: [
+            {
+                type: "mc",
+                text: "What is the primary driving force behind the reaction between Sodium metal and Chlorine gas?",
+                options: [
+                    "The chlorine diatomic molecules undergo endothermic expansion to absorb heat.",
+                    "Sodium transfers its single valence electron to highly electronegative Chlorine, forming stable ionic charges.",
+                    "Sodium and chlorine atoms share their electrons equally in a nonpolar covalent lattice.",
+                    "Liquid sodium undergoes physical boiling, pushing chlorine molecules out of the container."
+                ],
+                correctIndex: 1,
+                feedback: "Correct! Sodium (electronegativity 0.93) has a low ionization energy and easily loses its one valence electron. Chlorine (electronegativity 3.16) has a high electron affinity and readily accepts it, creating stable Na⁺ and Cl⁻ ions."
+            },
+            {
+                type: "mc",
+                text: "What is the physical structure of the product formed in the Sodium-Chlorine synthesis reaction?",
+                options: [
+                    "A series of linear diatomic covalent chains that vaporize instantly.",
+                    "A tetrahedral organic molecular configuration.",
+                    "An alternating cubic ionic crystal lattice held together by strong electrostatic forces.",
+                    "A free-floating sea of delocalized metallic electrons."
+                ],
+                correctIndex: 2,
+                feedback: "Perfect! Sodium chloride (NaCl) forms a crystalline cubic lattice where each Na⁺ ion is surrounded by six Cl⁻ ions, and vice versa, held together by high electrostatic lattice energy."
+            },
+            {
+                type: "valence",
+                text: "Interactive Shell Challenge: Valence Octet Completion for Chlorine. Click the empty valence slot on the chlorine atom to fill it and complete its stable outer shell octet!",
+                element: "Cl",
+                targetSlots: 1,
+                feedback: "Wonderful! By accepting one electron, Chlorine completes its valence octet, achieving the stable electronic configuration of a chloride anion (Cl⁻)."
+            }
+        ]
+    },
+    {
+        id: "haber_quiz",
+        title: "Haber-Bosch Synthesis",
+        questions: [
+            {
+                type: "mc",
+                text: "Why does the Haber-Bosch synthesis of Ammonia require high temperature, high pressure, and a metal catalyst?",
+                options: [
+                    "Because nitrogen molecules repel hydrogen molecules electrostatically.",
+                    "Because the nitrogen-nitrogen bond is a weak single covalent bond that must be kept from breaking.",
+                    "Because nitrogen gas (N₂) has an extremely strong covalent triple bond (N≡N) with a very high activation energy barrier.",
+                    "Because the reaction is highly endothermic and must absorb heat to yield products."
+                ],
+                correctIndex: 2,
+                feedback: "Correct! The N≡N triple bond is incredibly strong (945 kJ/mol). The metal catalyst, heat, and pressure are needed to weaken and split these triple bonds, allowing nitrogen atoms to react with hydrogen."
+            },
+            {
+                type: "mc",
+                text: "What is the molecular geometry and polarity of the synthesized Ammonia (NH₃) molecule?",
+                options: [
+                    "Linear and nonpolar.",
+                    "Trigonal pyramidal and polar covalent.",
+                    "Perfect tetrahedral and metallic.",
+                    "Planar triangular and ionic."
+                ],
+                correctIndex: 1,
+                feedback: "Perfect! Ammonia has a trigonal pyramidal geometry due to the three N-H single bonds and a lone pair of electrons on the nitrogen atom. The electronegativity difference makes the molecule polar covalent."
+            },
+            {
+                type: "valence",
+                text: "Interactive Shell Challenge: Valence Octet Sharing in Nitrogen. Click the 3 empty valence slots on the nitrogen atom to fill them and complete its outer shell!",
+                element: "N",
+                targetSlots: 3,
+                feedback: "Excellent! By sharing 3 electrons with 3 hydrogen atoms, Nitrogen completes its outer octet, achieving a stable, filled valence shell."
+            }
+        ]
+    },
+    {
+        id: "decomposition_quiz",
+        title: "Catalytic Peroxide Decomposition",
+        questions: [
+            {
+                type: "mc",
+                text: "What role does Manganese Dioxide (MnO₂) play in the decomposition of Hydrogen Peroxide (H₂O₂)?",
+                options: [
+                    "It acts as a reactant, being completely consumed to form Manganese Chloride.",
+                    "It acts as a cooling agent, absorbing the reaction's heat to prevent boiling.",
+                    "It acts as a catalyst, providing an alternative transition path that dramatically lowers the activation energy.",
+                    "It acts as a surfactant, holding the oxygen bubbles dissolved in the solution."
+                ],
+                correctIndex: 2,
+                feedback: "Excellent! Catalysts like MnO₂ lower the activation energy of a reaction without being consumed themselves. This allows the unstable O-O bond in hydrogen peroxide to snap rapidly at room temperature."
+            },
+            {
+                type: "mc",
+                text: "The catalytic decomposition of hydrogen peroxide (2H₂O₂ → 2H₂O + O₂ ↑) is a disproportionation reaction. What does this mean?",
+                options: [
+                    "The reactants undergo both physical boiling and melting simultaneously.",
+                    "Oxygen atoms in the reactant are both oxidized (to O₂) and reduced (to H₂O) in the same reaction.",
+                    "The mass of the products is greater than the starting mass of the reactants.",
+                    "Nitrogen and hydrogen gases are synthesized as byproducts."
+                ],
+                correctIndex: 1,
+                feedback: "Correct! In H₂O₂, the oxidation state of oxygen is -1. In the products, oxygen is reduced to -2 in H₂O and oxidized to 0 in O₂. A reaction where an element is simultaneously oxidized and reduced is called disproportionation."
+            }
+        ]
     }
 ];
 

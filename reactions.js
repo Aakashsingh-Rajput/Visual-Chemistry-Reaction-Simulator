@@ -357,5 +357,161 @@ const ReactionsCatalog = {
                 timelinePos: 100
             }
         ]
+    },
+    "salt": {
+        id: "salt",
+        title: "Synthesis of Table Salt",
+        subtitle: "Valence Electron Transfer & Ionic Grid Locking",
+        equationHtml: "2Na + Cl₂ <span class='arrow'>→</span> 2NaCl",
+        equationText: "2Na + Cl2 -> 2NaCl",
+        enthalpy: "Highly Exothermic",
+        deltaH: -822.2,
+        activationEnergy: 80,
+        description: "Reaction between soft metallic Sodium (Na) and poisonous green Chlorine gas (Cl₂). An electron transfers fully from electropositive Sodium (electronegativity 0.93) to electronegative Chlorine (electronegativity 3.16), forming Na⁺ and Cl⁻ ions that bond electrostatically into a solid cubic crystal lattice.",
+        
+        energyCurve: [
+            { x: 0, y: 75, label: "Reactants" },
+            { x: 30, y: 75 },
+            { x: 50, y: 40, label: "Transition State" },
+            { x: 72, y: 125 },
+            { x: 100, y: 125, label: "Products" }
+        ],
+        
+        steps: [
+            {
+                index: 1,
+                title: "Reactive Elements",
+                description: "Discrete, neutral Sodium metallic atoms (Na) and a covalent diatomic Chlorine molecule (Cl₂) sit together. Despite the huge thermodynamic potential, they need activation energy to start the reaction.",
+                requiresTrigger: true,
+                triggerText: "Apply Spark (Activation Energy)",
+                triggerIcon: "⚡",
+                timelinePos: 25
+            },
+            {
+                index: 2,
+                title: "Diatomic Bond Cleavage",
+                description: "The spark injects activation energy. The heat causes the Chlorine molecule to vibrate violently and undergo homolytic cleavage, splitting into two highly reactive, neutral Chlorine radicals (Cl).",
+                requiresTrigger: false,
+                timelinePos: 50
+            },
+            {
+                index: 3,
+                title: "Valence Electron Transfer",
+                description: "Due to the massive electronegativity gap, each Sodium atom completely transfers its single outer valence electron to a highly electronegative Chlorine atom. This creates stable Na⁺ cations and Cl⁻ anions.",
+                requiresTrigger: false,
+                timelinePos: 72
+            },
+            {
+                index: 4,
+                title: "Cubic Lattice Assembly",
+                description: "Opposite electrostatic charges pull Na⁺ and Cl⁻ together. They stack alternatingly, snapping into a solid, insoluble cubic crystal table salt (NaCl) lattice. The massive energy release settles them in a deep potential valley.",
+                requiresTrigger: false,
+                timelinePos: 100
+            }
+        ]
+    },
+    "haber": {
+        id: "haber",
+        title: "Haber-Bosch Synthesis",
+        subtitle: "Triple Bond Activation & Ammonia Synthesis",
+        equationHtml: "N₂ + 3H₂ <span class='arrow'>⇌</span> 2NH₃",
+        equationText: "N2 + 3H2 -> 2NH3",
+        enthalpy: "Exothermic",
+        deltaH: -92.4,
+        activationEnergy: 170,
+        description: "Industrial synthesis of ammonia from nitrogen and hydrogen gases. Breaking the incredibly strong covalent Nitrogen-Nitrogen triple bond (N≡N) requires extreme activation energy (heat/pressure) and an iron catalyst, yielding polar covalent N-H single bonds.",
+        
+        energyCurve: [
+            { x: 0, y: 70, label: "Reactants" },
+            { x: 30, y: 70 },
+            { x: 55, y: 15, label: "Transition (Catalyst)" },
+            { x: 75, y: 95 },
+            { x: 100, y: 95, label: "Products" }
+        ],
+        
+        steps: [
+            {
+                index: 1,
+                title: "Reactant Gases",
+                description: "Nitrogen gas (N₂ with an extremely tough N≡N triple bond) and Hydrogen gas (H₂ with H-H single bonds) bounce at room temperature. The bonds are too robust to react spontaneously.",
+                requiresTrigger: true,
+                triggerText: "Heat under Pressure (Catalyst)",
+                triggerIcon: "🔥",
+                timelinePos: 25
+            },
+            {
+                index: 2,
+                title: "Catalytic Bond Cleavage",
+                description: "High temperature and pressure, facilitated by a solid metal catalyst surface, break the covalent N≡N triple bonds and H-H single bonds, generating free reactive Nitrogen and Hydrogen atomic radicals.",
+                requiresTrigger: false,
+                timelinePos: 55
+            },
+            {
+                index: 3,
+                title: "Pyramidal Grouping",
+                description: "Electronegative Nitrogen (3.04) attracts the highly mobile Hydrogen radicals (2.20). The atoms collide on the catalyst surface and begin arranging into pyramidal shapes.",
+                requiresTrigger: false,
+                timelinePos: 75
+            },
+            {
+                index: 4,
+                title: "Ammonia Release",
+                description: "Two stable, pyramidal Ammonia (NH₃) molecules are formed with three stable polar covalent N-H single bonds each. They desorb from the catalyst surface, releasing heat energy into the chamber.",
+                requiresTrigger: false,
+                timelinePos: 100
+            }
+        ]
+    },
+    "decomposition": {
+        id: "decomposition",
+        title: "Catalytic Peroxide Decomposition",
+        subtitle: "Rapid Disproportionation & Gas Release",
+        equationHtml: "2H₂O₂ <span class='arrow'>→</span> 2H₂O + O₂ ↑",
+        equationText: "2H2O2 -> 2H2O + O2",
+        enthalpy: "Exothermic",
+        deltaH: -196.4,
+        activationEnergy: 75,
+        description: "Decomposition of unstable Hydrogen Peroxide (H₂O₂) into water and oxygen gas. Adding a catalyst (Manganese Dioxide, MnO₂) drastically lowers the activation barrier, triggering rapid bond cleavage, high heat release, and diatomic Oxygen gas bubbles.",
+        
+        energyCurve: [
+            { x: 0, y: 65, label: "Reactants" },
+            { x: 30, y: 65 },
+            { x: 50, y: 40, label: "Catalytic Transition" },
+            { x: 72, y: 110 },
+            { x: 100, y: 110, label: "Products" }
+        ],
+        
+        steps: [
+            {
+                index: 1,
+                title: "Aqueous Peroxide",
+                description: "Hydrogen peroxide (H₂O₂ - an unstable compound with a weak oxygen-oxygen single bond and two oxygen-hydrogen polar bonds) sits dissolved in aqueous solution.",
+                requiresTrigger: true,
+                triggerText: "Inject MnO₂ Catalyst",
+                triggerIcon: "🧪",
+                timelinePos: 25
+            },
+            {
+                index: 2,
+                title: "Weak O-O Bond Cleavage",
+                description: "The MnO₂ catalyst surface coordinates with peroxide molecules. This destabilizes the weak O-O bond, snapping it easily at room temperature and releasing active Hydrogen and Oxygen radicals.",
+                requiresTrigger: false,
+                timelinePos: 50
+            },
+            {
+                index: 3,
+                title: "Diatomic & Polar Assembly",
+                description: "The radicals rearrange rapidly. Free oxygen radicals pair up to form highly stable diatomic Oxygen double bonds (O=O). The remaining hydrogen and oxygen atoms group to form stable bent water structures.",
+                requiresTrigger: false,
+                timelinePos: 72
+            },
+            {
+                index: 4,
+                title: "Gas Release & Hydration",
+                description: "Two stable covalent H₂O molecules remain dissolved. The newly formed covalent O₂ molecule, being highly insoluble, clusters together to form gas bubbles that float up and escape the solution.",
+                requiresTrigger: false,
+                timelinePos: 100
+            }
+        ]
     }
 };

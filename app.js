@@ -52,6 +52,31 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Mobile Sidebar Drawer Toggle Controls
+    const btnToggleSidebar = document.getElementById('btn-toggle-sidebar');
+    const sidebar = document.getElementById('app-sidebar');
+    const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+    if (btnToggleSidebar && sidebar && sidebarOverlay) {
+        function toggleSidebar() {
+            sidebar.classList.toggle('open');
+            sidebarOverlay.classList.toggle('active');
+        }
+
+        btnToggleSidebar.addEventListener('click', toggleSidebar);
+        sidebarOverlay.addEventListener('click', toggleSidebar);
+
+        // Auto-close sidebar on nav item click on mobile/tablet viewports
+        const menuItems = sidebar.querySelectorAll('.nav-item');
+        menuItems.forEach(item => {
+            item.addEventListener('click', () => {
+                if (sidebar.classList.contains('open')) {
+                    toggleSidebar();
+                }
+            });
+        });
+    }
+
     // 2. Initialize SIMULATOR
     function initSimulator() {
         simulatorEngine = new ChemistryEngine('chemistry-canvas');
@@ -64,6 +89,131 @@ document.addEventListener('DOMContentLoaded', () => {
         reactionSelect.addEventListener('change', (e) => {
             loadSelectedReaction(e.target.value);
         });
+
+        // Searchable Autocomplete Dropdown Setup
+        const searchDropdown = document.getElementById('searchable-dropdown');
+        const dropdownTrigger = document.getElementById('dropdown-trigger');
+        const dropdownPanel = document.getElementById('dropdown-panel');
+        const searchInput = document.getElementById('reaction-search-input');
+        const optionsList = document.getElementById('dropdown-options-list');
+        const selectedLabel = document.getElementById('selected-reaction-label');
+
+        function populateDropdownOptions() {
+            if (!optionsList) return;
+            optionsList.innerHTML = '';
+            
+            Object.keys(ReactionsCatalog).forEach(key => {
+                const rx = ReactionsCatalog[key];
+                const li = document.createElement('li');
+                li.setAttribute('data-value', key);
+                if (key === reactionSelect.value) {
+                    li.className = 'selected';
+                    if (selectedLabel) {
+                        selectedLabel.innerText = `${rx.title} (${rx.subtitle})`;
+                    }
+                }
+                
+                li.innerHTML = `
+                    <span class="option-title">${rx.title}</span>
+                    <span class="option-sub">${rx.subtitle}</span>
+                `;
+                
+                li.addEventListener('click', () => {
+                    // Update trigger label
+                    if (selectedLabel) {
+                        selectedLabel.innerText = `${rx.title} (${rx.subtitle})`;
+                    }
+                    
+                    // Update native select
+                    reactionSelect.value = key;
+                    
+                    // Trigger load
+                    reactionSelect.dispatchEvent(new Event('change'));
+                    
+                    // Highlight selected
+                    optionsList.querySelectorAll('li').forEach(item => item.classList.remove('selected'));
+                    li.classList.add('selected');
+                    
+                    // Close panel
+                    if (dropdownPanel) dropdownPanel.classList.add('hidden');
+                    if (searchDropdown) searchDropdown.classList.remove('open');
+                    if (searchInput) {
+                        searchInput.value = '';
+                        filterOptions(''); // Reset filter
+                    }
+                });
+                
+                optionsList.appendChild(li);
+            });
+        }
+
+        function filterOptions(query) {
+            if (!optionsList) return;
+            const normalizedQuery = query.toLowerCase().trim();
+            const items = optionsList.querySelectorAll('li:not(.no-results)');
+            let visibleCount = 0;
+            
+            items.forEach(item => {
+                const title = item.querySelector('.option-title').innerText.toLowerCase();
+                const sub = item.querySelector('.option-sub').innerText.toLowerCase();
+                
+                if (title.includes(normalizedQuery) || sub.includes(normalizedQuery)) {
+                    item.style.display = 'flex';
+                    visibleCount++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            // Handle no results state
+            let noResultsItem = optionsList.querySelector('.no-results');
+            if (visibleCount === 0) {
+                if (!noResultsItem) {
+                    noResultsItem = document.createElement('li');
+                    noResultsItem.className = 'no-results';
+                    noResultsItem.innerText = 'No reactions matched your search';
+                    optionsList.appendChild(noResultsItem);
+                }
+            } else if (noResultsItem) {
+                noResultsItem.remove();
+            }
+        }
+
+        if (dropdownTrigger && dropdownPanel && searchDropdown) {
+            dropdownTrigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isHidden = dropdownPanel.classList.contains('hidden');
+                if (isHidden) {
+                    dropdownPanel.classList.remove('hidden');
+                    searchDropdown.classList.add('open');
+                    if (searchInput) searchInput.focus();
+                } else {
+                    dropdownPanel.classList.add('hidden');
+                    searchDropdown.classList.remove('open');
+                }
+            });
+        }
+
+        if (searchInput) {
+            searchInput.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent dropdown from closing
+            });
+
+            searchInput.addEventListener('input', (e) => {
+                filterOptions(e.target.value);
+            });
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (searchDropdown && !searchDropdown.contains(e.target)) {
+                if (dropdownPanel) dropdownPanel.classList.add('hidden');
+                searchDropdown.classList.remove('open');
+            }
+        });
+
+        // Initialize dynamic dropdown listing
+        populateDropdownOptions();
 
         // Playback buttons
         const btnPlayPause = document.getElementById('btn-play-pause');
@@ -157,6 +307,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function loadSelectedReaction(reactionId) {
         simulatorEngine.loadReaction(reactionId);
+        
+        // Sync searchable dropdown UI and option styling
+        const rx = ReactionsCatalog[reactionId];
+        const selectedLabel = document.getElementById('selected-reaction-label');
+        if (selectedLabel && rx) {
+            selectedLabel.innerText = `${rx.title} (${rx.subtitle})`;
+        }
+        const optionsList = document.getElementById('dropdown-options-list');
+        if (optionsList) {
+            optionsList.querySelectorAll('li').forEach(item => {
+                if (item.getAttribute('data-value') === reactionId) {
+                    item.classList.add('selected');
+                } else {
+                    item.classList.remove('selected');
+                }
+            });
+        }
         
         const reaction = ReactionsCatalog[reactionId];
         energyChart.setReaction(reaction);

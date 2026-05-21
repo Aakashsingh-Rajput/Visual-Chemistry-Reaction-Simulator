@@ -13,8 +13,26 @@
 </head>
 <body>
     <div class="app-container">
+        <!-- Mobile Top Bar Header -->
+        <header class="mobile-top-bar">
+            <button id="btn-toggle-sidebar" class="hamburger-btn" aria-label="Toggle Menu">
+                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+            <div class="mobile-logo">
+                <h1>REACTION LAB</h1>
+            </div>
+            <div style="width: 24px;"></div>
+        </header>
+        
+        <!-- Sidebar Backdrop Overlay -->
+        <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
         <!-- Sidebar Navigation -->
-        <aside class="sidebar">
+        <aside class="sidebar" id="app-sidebar">
             <div class="logo-area">
                 <div class="logo-icon">
                     <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
@@ -79,14 +97,35 @@
             <section id="view-simulator" class="tab-view active">
                 <header class="view-header">
                     <div class="reaction-selector-bar">
-                        <label for="reaction-select">Active Reaction:</label>
-                        <div class="custom-select">
-                            <select id="reaction-select">
+                        <label>Active Reaction:</label>
+                        <div class="searchable-dropdown" id="searchable-dropdown">
+                            <div class="dropdown-trigger glass-input" id="dropdown-trigger">
+                                <span id="selected-reaction-label">Synthesis of Water (Covalent Bond Breaking & Formation)</span>
+                                <svg class="dropdown-arrow" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                            <div class="dropdown-panel glass-card hidden" id="dropdown-panel">
+                                <div class="search-input-container">
+                                    <svg class="search-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none">
+                                        <circle cx="11" cy="11" r="8"></circle>
+                                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                    </svg>
+                                    <input type="text" id="reaction-search-input" placeholder="Search reactions..." autocomplete="off">
+                                </div>
+                                <ul class="dropdown-options" id="dropdown-options-list">
+                                    <!-- Injected dynamically in JavaScript -->
+                                </ul>
+                            </div>
+                            <select id="reaction-select" style="display: none;">
                                 <option value="water">Synthesis of Water (Covalent Bond Breaking & Formation)</option>
                                 <option value="neutralization">Acid-Base Neutralization (Ion Exchange)</option>
                                 <option value="redox">Single Displacement Redox (Electron Transfer)</option>
                                 <option value="precipitation">Double Displacement (Precipitation Insoluble Lattice)</option>
                                 <option value="combustion">Methane Combustion (Exothermic Reaction)</option>
+                                <option value="salt">Synthesis of Table Salt (Valence Electron Transfer & Ionic Grid Locking)</option>
+                                <option value="haber">Haber-Bosch Synthesis (Triple Bond Activation & Ammonia Synthesis)</option>
+                                <option value="decomposition">Catalytic Peroxide Decomposition (Rapid Disproportionation & Gas Release)</option>
                             </select>
                         </div>
                     </div>

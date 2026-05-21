@@ -314,6 +314,78 @@ class ChemistryEngine {
                 this.createCovalentBond(o3, o4, 'double');
             }
         }
+        else if (id === "salt") {
+            this.temperature = 300;
+            const count = this.concentration;
+            for (let i = 0; i < count; i++) {
+                const yOffset = i * 160;
+                const na1 = this.spawnAtom("Na", this.width * 0.2, this.height * (0.35 + yOffset / 400));
+                const na2 = this.spawnAtom("Na", this.width * 0.25, this.height * (0.55 + yOffset / 400));
+                
+                const cl1 = this.spawnAtom("Cl", this.width * 0.75, this.height * (0.4 + yOffset / 400));
+                const cl2 = this.spawnAtom("Cl", this.width * 0.8, this.height * (0.5 + yOffset / 400));
+                this.createCovalentBond(cl1, cl2);
+            }
+            
+            this.atoms.forEach(a => {
+                a.vx = (Math.random() - 0.5) * 1.2;
+                a.vy = (Math.random() - 0.5) * 1.2;
+            });
+        }
+        else if (id === "haber") {
+            this.temperature = 300;
+            const count = this.concentration;
+            for (let i = 0; i < count; i++) {
+                const yOffset = i * 160;
+                const n1 = this.spawnAtom("N", this.width * 0.45, this.height * (0.3 + yOffset / 400));
+                const n2 = this.spawnAtom("N", this.width * 0.5, this.height * (0.35 + yOffset / 400));
+                this.createCovalentBond(n1, n2, 'double');
+                
+                const h1 = this.spawnAtom("H", this.width * 0.2, this.height * (0.2 + yOffset / 400));
+                const h2 = this.spawnAtom("H", this.width * 0.25, this.height * (0.2 + yOffset / 400));
+                this.createCovalentBond(h1, h2);
+                
+                const h3 = this.spawnAtom("H", this.width * 0.2, this.height * (0.5 + yOffset / 400));
+                const h4 = this.spawnAtom("H", this.width * 0.25, this.height * (0.5 + yOffset / 400));
+                this.createCovalentBond(h3, h4);
+                
+                const h5 = this.spawnAtom("H", this.width * 0.75, this.height * (0.5 + yOffset / 400));
+                const h6 = this.spawnAtom("H", this.width * 0.8, this.height * (0.5 + yOffset / 400));
+                this.createCovalentBond(h5, h6);
+            }
+            
+            this.atoms.forEach(a => {
+                a.vx = (Math.random() - 0.5) * 1.5;
+                a.vy = (Math.random() - 0.5) * 1.5;
+            });
+        }
+        else if (id === "decomposition") {
+            this.temperature = 300;
+            const count = this.concentration;
+            for (let i = 0; i < count; i++) {
+                const yOffset = i * 160;
+                const h1 = this.spawnAtom("H", this.width * 0.2, this.height * (0.3 + yOffset / 400));
+                const o1 = this.spawnAtom("O", this.width * 0.28, this.height * (0.32 + yOffset / 400));
+                const o2 = this.spawnAtom("O", this.width * 0.35, this.height * (0.35 + yOffset / 400));
+                const h2 = this.spawnAtom("H", this.width * 0.43, this.height * (0.33 + yOffset / 400));
+                this.createCovalentBond(h1, o1);
+                this.createCovalentBond(o1, o2);
+                this.createCovalentBond(o2, h2);
+                
+                const h3 = this.spawnAtom("H", this.width * 0.6, this.height * (0.5 + yOffset / 400));
+                const o3 = this.spawnAtom("O", this.width * 0.68, this.height * (0.52 + yOffset / 400));
+                const o4 = this.spawnAtom("O", this.width * 0.75, this.height * (0.55 + yOffset / 400));
+                const h4 = this.spawnAtom("H", this.width * 0.83, this.height * (0.53 + yOffset / 400));
+                this.createCovalentBond(h3, o3);
+                this.createCovalentBond(o3, o4);
+                this.createCovalentBond(o4, h4);
+            }
+            
+            this.atoms.forEach(a => {
+                a.vx = (Math.random() - 0.5) * 1.0;
+                a.vy = (Math.random() - 0.5) * 1.0;
+            });
+        }
     }
 
     setStep(stepIndex) {
@@ -766,6 +838,275 @@ class ChemistryEngine {
                     // Zoom away at high product speed
                     a.vx = (Math.random() - 0.5) * 4;
                     a.vy = (Math.random() - 0.5) * 4;
+                });
+            }
+        }
+        else if (id === "salt") {
+            if (step === 1) {
+                this.initializeReactionState();
+            } else if (step === 2) {
+                // Diatomic Bond Cleavage of Cl2
+                this.breakAllBonds();
+                const clAtoms = this.atoms.filter(a => a.element === "Cl");
+                const naAtoms = this.atoms.filter(a => a.element === "Na");
+                
+                clAtoms.forEach(cl => {
+                    cl.vx = (Math.random() - 0.5) * 6;
+                    cl.vy = (Math.random() - 0.5) * 6;
+                    cl.glow = true;
+                });
+                naAtoms.forEach(na => {
+                    na.vx = (Math.random() - 0.5) * 2;
+                    na.vy = (Math.random() - 0.5) * 2;
+                });
+                this.spawnSpark(this.width * 0.75, this.height * 0.45, "#a855f7", 25);
+            } else if (step === 3) {
+                // Valence Electron Transfer
+                const naAtoms = this.atoms.filter(a => a.element === "Na");
+                const clAtoms = this.atoms.filter(a => a.element === "Cl");
+                
+                // Pair Na and Cl atoms and pull them close to simulate electron transfer
+                for (let i = 0; i < naAtoms.length; i++) {
+                    const na = naAtoms[i];
+                    const cl = clAtoms[i];
+                    if (na && cl) {
+                        na.charge = 1;
+                        na.chargeLabel = "+";
+                        cl.charge = -1;
+                        cl.chargeLabel = "-";
+                        
+                        // Pull together
+                        na.targetX = this.width * 0.35 + (i * 120);
+                        na.targetY = this.height * 0.45;
+                        cl.targetX = na.targetX + 45;
+                        cl.targetY = na.targetY;
+                        
+                        // Spark at transfer site
+                        this.spawnSpark(na.targetX + 22, na.targetY, "#10b981", 15);
+                    }
+                }
+            } else if (step === 4) {
+                // Cubic Lattice Assembly
+                const naAtoms = this.atoms.filter(a => a.element === "Na");
+                const clAtoms = this.atoms.filter(a => a.element === "Cl");
+                
+                const centerX = this.width / 2;
+                const centerY = this.height * 0.5;
+                
+                // Stack alternatingly in a 2x2 grid (or larger for higher concentration)
+                for (let i = 0; i < naAtoms.length; i++) {
+                    const na = naAtoms[i];
+                    const cl = clAtoms[i];
+                    
+                    const row = Math.floor(i / 2);
+                    const col = i % 2;
+                    const xOffset = col * 60 - 30;
+                    const yOffset = row * 60 - 30;
+                    
+                    if (na) {
+                        na.targetX = centerX + xOffset;
+                        na.targetY = centerY + yOffset;
+                        na.state = "lattice";
+                        na.vx = na.vy = 0;
+                    }
+                    if (cl) {
+                        cl.targetX = centerX + xOffset + 30;
+                        cl.targetY = centerY + yOffset + 30;
+                        cl.state = "lattice";
+                        cl.vx = cl.vy = 0;
+                    }
+                }
+                
+                this.spawnSpark(centerX, centerY, "#cbd5e1", 30);
+            }
+        }
+        else if (id === "haber") {
+            if (step === 1) {
+                this.initializeReactionState();
+            } else if (step === 2) {
+                // Catalytic triple bond cleavage
+                this.temperature = 900;
+                this.breakAllBonds();
+                this.atoms.forEach(a => {
+                    a.glow = true;
+                    a.vx = (Math.random() - 0.5) * 7;
+                    a.vy = (Math.random() - 0.5) * 7;
+                });
+                this.spawnSpark(this.width / 2, this.height / 2, "#f59e0b", 35);
+            } else if (step === 3) {
+                // Pyramidal grouping on catalyst
+                this.temperature = 500;
+                const nAtoms = this.atoms.filter(a => a.element === "N");
+                const hAtoms = this.atoms.filter(a => a.element === "H");
+                
+                for (let i = 0; i < nAtoms.length; i++) {
+                    const n = nAtoms[i];
+                    if (n) {
+                        n.targetX = this.width * (0.35 + i * 0.3);
+                        n.targetY = this.height * 0.45;
+                        
+                        // Set hydrogen targets around the nitrogen in a pyramidal geometry
+                        const hIndices = [i * 3, i * 3 + 1, i * 3 + 2];
+                        const offsets = [
+                            { dx: -25, dy: 15 },
+                            { dx: 25, dy: 15 },
+                            { dx: 0, dy: -25 }
+                        ];
+                        
+                        hIndices.forEach((hIdx, j) => {
+                            const h = hAtoms[hIdx];
+                            if (h) {
+                                h.targetX = n.targetX + offsets[j].dx;
+                                h.targetY = n.targetY + offsets[j].dy;
+                            }
+                        });
+                    }
+                }
+            } else if (step === 4) {
+                this.temperature = 400;
+                this.breakAllBonds();
+                
+                const nAtoms = this.atoms.filter(a => a.element === "N");
+                const hAtoms = this.atoms.filter(a => a.element === "H");
+                
+                for (let i = 0; i < nAtoms.length; i++) {
+                    const n = nAtoms[i];
+                    if (n) {
+                        const hIndices = [i * 3, i * 3 + 1, i * 3 + 2];
+                        hIndices.forEach(hIdx => {
+                            const h = hAtoms[hIdx];
+                            if (h) {
+                                this.createCovalentBond(n, h);
+                            }
+                        });
+                        this.spawnSpark(n.x, n.y, "#f59e0b", 20);
+                    }
+                }
+                
+                this.atoms.forEach(a => {
+                    a.glow = false;
+                    a.targetX = null;
+                    a.targetY = null;
+                    a.vx = (Math.random() - 0.5) * 3;
+                    a.vy = (Math.random() - 0.5) * 3;
+                });
+            }
+        }
+        else if (id === "decomposition") {
+            if (step === 1) {
+                this.initializeReactionState();
+            } else if (step === 2) {
+                // Weak O-O Bond Cleavage -> Break O-O but keep H-O
+                this.breakAllBonds();
+                
+                const hAtoms = this.atoms.filter(a => a.element === "H");
+                const oAtoms = this.atoms.filter(a => a.element === "O");
+                
+                // Re-bind only H-O bonds to create OH radicals
+                // Per H2O2 molecule: h1-o1 and o2-h2 are kept
+                for (let i = 0; i < oAtoms.length / 2; i++) {
+                    const oLeft = oAtoms[i * 2];
+                    const oRight = oAtoms[i * 2 + 1];
+                    const hLeft = hAtoms[i * 2];
+                    const hRight = hAtoms[i * 2 + 1];
+                    
+                    if (oLeft && hLeft) this.createCovalentBond(oLeft, hLeft);
+                    if (oRight && hRight) this.createCovalentBond(oRight, hRight);
+                    
+                    if (oLeft) oLeft.glow = true;
+                    if (oRight) oRight.glow = true;
+                }
+                
+                this.atoms.forEach(a => {
+                    a.vx = (Math.random() - 0.5) * 4;
+                    a.vy = (Math.random() - 0.5) * 4;
+                });
+                
+                this.spawnSpark(this.width * 0.35, this.height * 0.35, "#ef4444", 20);
+                this.spawnSpark(this.width * 0.7, this.height * 0.5, "#ef4444", 20);
+            } else if (step === 3) {
+                // Assemble: 2 H2O and 1 O2 per concentration unit
+                const hAtoms = this.atoms.filter(a => a.element === "H");
+                const oAtoms = this.atoms.filter(a => a.element === "O");
+                
+                const units = this.concentration;
+                for (let i = 0; i < units; i++) {
+                    const idxH = i * 4;
+                    const idxO = i * 4;
+                    
+                    // H2O #1: oAtoms[idxO] with hAtoms[idxH] and hAtoms[idxH+1]
+                    if (oAtoms[idxO] && hAtoms[idxH] && hAtoms[idxH+1]) {
+                        oAtoms[idxO].targetX = this.width * (0.2 + i * 0.15);
+                        oAtoms[idxO].targetY = this.height * 0.5;
+                        hAtoms[idxH].targetX = oAtoms[idxO].targetX - 20;
+                        hAtoms[idxH].targetY = oAtoms[idxO].targetY + 15;
+                        hAtoms[idxH+1].targetX = oAtoms[idxO].targetX + 20;
+                        hAtoms[idxH+1].targetY = oAtoms[idxO].targetY + 15;
+                    }
+                    
+                    // H2O #2: oAtoms[idxO+2] with hAtoms[idxH+2] and hAtoms[idxH+3]
+                    if (oAtoms[idxO+2] && hAtoms[idxH+2] && hAtoms[idxH+3]) {
+                        oAtoms[idxO+2].targetX = this.width * (0.65 + i * 0.15);
+                        oAtoms[idxO+2].targetY = this.height * 0.5;
+                        hAtoms[idxH+2].targetX = oAtoms[idxO+2].targetX - 20;
+                        hAtoms[idxH+2].targetY = oAtoms[idxO+2].targetY + 15;
+                        hAtoms[idxH+3].targetX = oAtoms[idxO+2].targetX + 20;
+                        hAtoms[idxH+3].targetY = oAtoms[idxO+2].targetY + 15;
+                    }
+                    
+                    // O2: oAtoms[idxO+1] and oAtoms[idxO+3]
+                    if (oAtoms[idxO+1] && oAtoms[idxO+3]) {
+                        oAtoms[idxO+1].targetX = this.width * 0.45 + (i * 60);
+                        oAtoms[idxO+1].targetY = this.height * 0.3;
+                        oAtoms[idxO+3].targetX = oAtoms[idxO+1].targetX + 30;
+                        oAtoms[idxO+3].targetY = this.height * 0.3;
+                    }
+                }
+            } else if (step === 4) {
+                this.breakAllBonds();
+                
+                const hAtoms = this.atoms.filter(a => a.element === "H");
+                const oAtoms = this.atoms.filter(a => a.element === "O");
+                
+                const units = this.concentration;
+                for (let i = 0; i < units; i++) {
+                    const idxH = i * 4;
+                    const idxO = i * 4;
+                    
+                    // H2O #1
+                    if (oAtoms[idxO] && hAtoms[idxH] && hAtoms[idxH+1]) {
+                        this.createCovalentBond(oAtoms[idxO], hAtoms[idxH]);
+                        this.createCovalentBond(oAtoms[idxO], hAtoms[idxH+1]);
+                        oAtoms[idxO].state = "solvated";
+                        hAtoms[idxH].state = "solvated";
+                        hAtoms[idxH+1].state = "solvated";
+                    }
+                    // H2O #2
+                    if (oAtoms[idxO+2] && hAtoms[idxH+2] && hAtoms[idxH+3]) {
+                        this.createCovalentBond(oAtoms[idxO+2], hAtoms[idxH+2]);
+                        this.createCovalentBond(oAtoms[idxO+2], hAtoms[idxH+3]);
+                        oAtoms[idxO+2].state = "solvated";
+                        hAtoms[idxH+2].state = "solvated";
+                        hAtoms[idxH+3].state = "solvated";
+                    }
+                    // O2
+                    if (oAtoms[idxO+1] && oAtoms[idxO+3]) {
+                        this.createCovalentBond(oAtoms[idxO+1], oAtoms[idxO+3], 'double');
+                        oAtoms[idxO+1].state = "gas";
+                        oAtoms[idxO+3].state = "gas";
+                        
+                        // Gas bubble rising kinetics
+                        oAtoms[idxO+1].vy = -2.0;
+                        oAtoms[idxO+3].vy = -2.0;
+                        
+                        this.spawnSpark(oAtoms[idxO+1].x + 15, oAtoms[idxO+1].y, "#ef4444", 20);
+                    }
+                }
+                
+                this.atoms.forEach(a => {
+                    a.glow = false;
+                    a.targetX = null;
+                    a.targetY = null;
                 });
             }
         }
