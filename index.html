@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REACTION LAB | Interactive Chemistry Simulator</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+                        <path d="M4.5 16.5c-1.5 1.26-2.5 3.19-2.5 5.5h20c0-2.31-1-4.24-2.5-5.5"></path>
+                        <path d="M12 2v14.5"></path>
+                        <path d="M9 12h6"></path>
+                        <path d="M8 8h8"></path>
+                        <path d="M12 2L9 5h6z"></path>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <h1>REACTION LAB</h1>
+                    <span>Molecular Simulator</span>
+                </div>
+            </div>
+            
+            <nav class="nav-menu">
+                <button class="nav-item active" data-tab="simulator">
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polygon points="10 8 16 12 10 16 10 8"></polygon>
+                    </svg>
+                    <span>Simulator</span>
+                </button>
+                <button class="nav-item" data-tab="library">
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                        <path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5v-15z"></path>
+                    </svg>
+                    <span>Reaction Library</span>
+                </button>
+                <button class="nav-item" data-tab="sandbox">
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                        <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                    </svg>
+                    <span>Molecules Sandbox</span>
+                </button>
+                <button class="nav-item" data-tab="quiz">
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+                        <path d="M9 11l3 3L22 4"></path>
+                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                    </svg>
+                    <span>Quiz Challenge</span>
+                </button>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="footer-card">
+                    <span class="card-title">Valence Engine</span>
+                    <span class="card-status status-active">Online (60 FPS)</span>
+                    <div class="cpu-bar"><div class="cpu-progress" style="width: 32%"></div></div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Workspace Area -->
+        <main class="main-content">
+            
+            <!-- SIMULATOR VIEW -->
+            <section id="view-simulator" class="tab-view active">
+                <header class="view-header">
+                    <div class="reaction-selector-bar">
+                        <label for="reaction-select">Active Reaction:</label>
+                        <div class="custom-select">
+                            <select id="reaction-select">
+                                <option value="water">Synthesis of Water (Covalent Bond Breaking & Formation)</option>
+                                <option value="neutralization">Acid-Base Neutralization (Ion Exchange)</option>
+                                <option value="redox">Single Displacement Redox (Electron Transfer)</option>
+                                <option value="precipitation">Double Displacement (Precipitation Insoluble Lattice)</option>
+                                <option value="combustion">Methane Combustion (Exothermic Reaction)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="header-actions">
+                        <button id="btn-reset-reaction" class="btn btn-secondary">
+                            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none">
+                                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+                            </svg>
+                            <span>Reset</span>
+                        </button>
+                    </div>
+                </header>
+
+                <div class="workspace-grid">
+                    <!-- Left: Interactive Canvas Container -->
+                    <div class="canvas-container glass-card">
+                        <!-- Canvas Header / HUD -->
+                        <div class="canvas-hud">
+                            <div class="hud-item reaction-formula" id="formula-display">
+                                2H₂ + O₂ <span class="arrow">→</span> 2H₂O
+                            </div>
+                            <div class="hud-item simulation-state">
+                                <span class="pulse-dot"></span>
+                                <span id="simulation-state-text">Ready to React</span>
+                            </div>
+                        </div>
+
+                        <!-- Spark/Energy Trigger Overlay -->
+                        <div id="trigger-overlay" class="trigger-overlay hidden">
+                            <button id="btn-trigger-action" class="btn btn-glow">
+                                <span id="trigger-action-icon">⚡</span>
+                                <span id="trigger-action-text">Apply Activation Energy (Spark)</span>
+                            </button>
+                        </div>
+
+                        <!-- Canvas itself -->
+                        <div class="canvas-wrapper">
+                            <!-- Dynamic Environments Panel -->
+                            <div class="env-controls-overlay glass-card">
+                                <span class="env-title">Reaction Conditions</span>
+                                <div class="env-row">
+                                    <label for="env-temp">Temp (K)</label>
+                                    <input type="range" id="env-temp" min="100" max="1000" step="50" value="300">
+                                    <span id="env-temp-val">300K</span>
+                                </div>
+                                <div class="env-row">
+                                    <label for="env-concentration">Conc.</label>
+                                    <select id="env-concentration">
+                                        <option value="1">Normal (Standard)</option>
+                                        <option value="2">High (Double Ions)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <canvas id="chemistry-canvas"></canvas>
+                        </div>
+
+                        <!-- Controls Bar at bottom of Canvas -->
+                        <div class="canvas-controls">
+                            <div class="playback-controls">
+                                <button id="btn-step-prev" class="control-btn" title="Previous Step">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                                        <polygon points="19 20 9 12 19 4 19 20"></polygon>
+                                        <line x1="5" y1="5" x2="5" y2="19" stroke="currentColor" stroke-width="2"></line>
+                                    </svg>
+                                </button>
+                                <button id="btn-play-pause" class="control-btn play-btn" title="Play / Pause">
+                                    <svg id="play-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                                    </svg>
+                                    <svg id="pause-icon" class="hidden" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                                        <rect x="6" y="4" width="4" height="16"></rect>
+                                        <rect x="14" y="4" width="4" height="16"></rect>
+                                    </svg>
+                                </button>
+                                <button id="btn-replay" class="control-btn" title="Replay Reaction">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none">
+                                        <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+                                    </svg>
+                                </button>
+                                <button id="btn-step-next" class="control-btn" title="Next Step">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                                        <polygon points="5 4 15 12 5 20 5 4"></polygon>
+                                        <line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2"></line>
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <div class="progress-bar-container">
+                                <span class="time-label">Progress</span>
+                                <div class="timeline-track" id="timeline-track">
+                                    <div class="timeline-fill" id="timeline-fill"></div>
+                                    <div class="timeline-handle" id="timeline-handle"></div>
+                                    <!-- Dynamic step markers will be injected here -->
+                                </div>
+                            </div>
+
+                            <div class="speed-slider-container">
+                                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                                <input type="range" id="speed-slider" min="0.2" max="2" step="0.1" value="1">
+                                <span class="speed-label" id="speed-val">1.0x</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Info Panel Dashboard -->
+                    <div class="dashboard-sidebar">
+                        
+                        <!-- Panel 1: Step-by-Step Mechanisms Explainer -->
+                        <div class="glass-card explainer-panel">
+                            <div class="card-header">
+                                <h3>Molecular Mechanism</h3>
+                                <span class="badge" id="step-badge">Step 1 of 4</span>
+                            </div>
+                            <div class="explainer-content">
+                                <h4 id="step-title">Gaseous Mixtures</h4>
+                                <p id="step-desc">
+                                    Hydrogen (H₂) and Oxygen (O₂) molecules bounce around at room temperature. Although the reaction is highly exothermic, they do not react spontaneously because they cannot overcome the initial activation energy barrier without a spark.
+                                </p>
+                            </div>
+                            <div class="step-nav-dots" id="step-dots">
+                                <!-- Dots will be dynamically generated -->
+                            </div>
+                        </div>
+
+                        <!-- Panel 2: Real-time Energy Profile Graph -->
+                        <div class="glass-card energy-panel">
+                            <div class="card-header">
+                                <h3>Reaction Thermodynamics</h3>
+                                <span class="badge enthalpy-badge" id="enthalpy-val">ΔH &lt; 0 (Exothermic)</span>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="energy-chart"></canvas>
+                            </div>
+                            <div class="energy-legend">
+                                <span class="legend-item"><span class="color-dot energy-ea"></span>Activation Energy (E<sub>a</sub>)</span>
+                                <span class="legend-item"><span class="color-dot energy-dh"></span>Enthalpy (ΔH)</span>
+                            </div>
+                        </div>
+
+                        <!-- Panel 3: Atomic Inspector (Interactive Click) -->
+                        <div class="glass-card inspector-panel" id="inspector-card">
+                            <div class="card-header">
+                                <h3>Atomic Inspector</h3>
+                                <span class="badge inspector-badge">Click an atom to inspect</span>
+                            </div>
+                            <div id="inspector-placeholder" class="inspector-placeholder">
+                                <svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" stroke-width="1.5" fill="none">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                </svg>
+                                <p>Click any atom or ion in the simulator to view its chemical configuration, electronegativity, and current bonding state.</p>
+                            </div>
+                            <div id="inspector-details" class="inspector-details hidden">
+                                <div class="inspector-title">
+                                    <div class="element-box" id="inspect-symbol">H</div>
+                                    <div>
+                                        <h4 id="inspect-name">Hydrogen</h4>
+                                        <span class="inspect-role" id="inspect-role">Reactant Particle</span>
+                                    </div>
+                                </div>
+                                <table class="inspector-table">
+                                    <tr>
+                                        <td>Atomic Number:</td>
+                                        <td id="inspect-number" class="val">1</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Electronegativity:</td>
+                                        <td id="inspect-negativity" class="val">2.20</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Valence Electrons:</td>
+                                        <td id="inspect-valence" class="val">1 / 2</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Electrons Shared/Transferred:</td>
+                                        <td id="inspect-bonds" class="val">1 (Covalent)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Current State:</td>
+                                        <td id="inspect-state" class="val state-tag">Neutral atom</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- REACTION LIBRARY VIEW -->
+            <section id="view-library" class="tab-view">
+                <header class="view-header">
+                    <h2>Reaction Reference Catalog</h2>
+                    <p>Select a reaction below to load its full thermodynamic properties and orbital visualizations.</p>
+                </header>
+                <div class="library-grid" id="library-cards-container">
+                    <!-- Loaded dynamically via JavaScript -->
+                </div>
+            </section>
+
+            <!-- MOLECULES SANDBOX VIEW -->
+            <section id="view-sandbox" class="tab-view">
+                <header class="view-header">
+                    <h2>Interactive Molecular Sandbox</h2>
+                    <p>Build, collide, and analyze customized molecules. Drag atoms into the canvas and experiment with bond mechanics.</p>
+                </header>
+                <div class="sandbox-layout">
+                    <div class="sandbox-tools glass-card">
+                        <h3>Element Toolbar</h3>
+                        <p class="tool-subtitle">Drag or click to spawn atoms into the reaction chamber:</p>
+                        <div class="spawn-buttons">
+                            <button class="spawn-btn hydrogen" data-element="H">
+                                <span class="atom-dot spawn-h"></span>
+                                <span>Hydrogen (H)</span>
+                            </button>
+                            <button class="spawn-btn oxygen" data-element="O">
+                                <span class="atom-dot spawn-o"></span>
+                                <span>Oxygen (O)</span>
+                            </button>
+                            <button class="spawn-btn carbon" data-element="C">
+                                <span class="atom-dot spawn-c"></span>
+                                <span>Carbon (C)</span>
+                            </button>
+                            <button class="spawn-btn sodium" data-element="Na">
+                                <span class="atom-dot spawn-na"></span>
+                                <span>Sodium (Na⁺)</span>
+                            </button>
+                            <button class="spawn-btn chlorine" data-element="Cl">
+                                <span class="atom-dot spawn-cl"></span>
+                                <span>Chlorine (Cl⁻)</span>
+                            </button>
+                        </div>
+                        
+                        <div class="sandbox-options">
+                            <h3>Chamber Settings</h3>
+                            <div class="option-row">
+                                <label for="sandbox-temp">Temperature (K)</label>
+                                <input type="range" id="sandbox-temp" min="100" max="1000" value="300">
+                                <span id="sandbox-temp-val">300 K</span>
+                            </div>
+                            <div class="option-row">
+                                <label for="sandbox-bonds">Auto-Bonding</label>
+                                <label class="switch">
+                                    <input type="checkbox" id="sandbox-auto-bond" checked>
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                            <div class="option-row">
+                                <label>Formula: <span id="sandbox-formula-lbl" style="font-family: var(--font-sans); color: var(--accent-cyan); font-weight: bold;">-</span></label>
+                            </div>
+                            <div class="sandbox-action-buttons" style="display: flex; gap: 8px; flex-direction: column;">
+                                <div style="display: flex; gap: 8px; width: 100%;">
+                                    <button class="btn btn-glow btn-full" id="btn-export-sandbox" style="flex: 1;">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                            <polyline points="7 10 12 15 17 10"></polyline>
+                                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                                        </svg>
+                                        Export
+                                    </button>
+                                    <button class="btn btn-secondary btn-full" id="btn-import-sandbox" style="flex: 1;">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                            <polyline points="17 8 12 3 7 8"></polyline>
+                                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                                        </svg>
+                                        Import
+                                    </button>
+                                </div>
+                                <input type="file" id="sandbox-import-file" style="display: none;" accept=".json">
+                                <button class="btn btn-danger btn-full" id="btn-clear-sandbox">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none">
+                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                    </svg>
+                                    Clear Chamber
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="sandbox-canvas-area glass-card">
+                        <div class="sandbox-hud">
+                            <span class="hud-item">Reaction Chamber Active</span>
+                            <span class="hud-item" id="sandbox-molecule-count">Atoms: 0 | Bonds: 0</span>
+                        </div>
+                        <canvas id="sandbox-canvas"></canvas>
+                        <div class="sandbox-instructions">
+                            <p>💡 <b>Tip:</b> Click and drag atoms to move them. Colliding compatible atoms will trigger covalent or ionic bonding! Drag bonds apart to break them.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- QUIZ VIEW -->
+            <section id="view-quiz" class="tab-view">
+                <header class="view-header">
+                    <h2>Reaction Mechanism Quiz</h2>
+                    <p>Test your understanding of chemical mechanisms, balanced reactions, and orbital transitions.</p>
+                </header>
+                <div class="quiz-container">
+                    <div class="quiz-sidebar glass-card">
+                        <h3>Quiz Modules</h3>
+                        <div class="quiz-list" id="quiz-modules-list">
+                            <!-- Injected dynamically -->
+                        </div>
+                        <div class="quiz-score-card">
+                            <span>Total Score</span>
+                            <span class="score-num" id="quiz-total-score">0 / 100</span>
+                        </div>
+                    </div>
+
+                    <div class="quiz-main-area glass-card" id="quiz-main-card">
+                        <div id="quiz-intro">
+                            <div class="quiz-intro-graphic">
+                                <svg viewBox="0 0 24 24" width="64" height="64" stroke="currentColor" stroke-width="1" fill="none">
+                                    <path d="M22 10v6M2 10v6"></path>
+                                    <path d="M6 12a6 6 0 0 1 12 0"></path>
+                                    <path d="M18 12a6 6 0 0 1-12 0"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                            </div>
+                            <h2>Choose a Module to Begin</h2>
+                            <p>Select one of the chemical reaction quiz modules on the left to evaluate your comprehension of electron configurations, valence bonds, and energetic pathways.</p>
+                        </div>
+
+                        <div id="quiz-question-box" class="hidden">
+                            <div class="question-header">
+                                <span class="question-progress" id="quiz-q-progress">Question 1 of 5</span>
+                                <span class="badge quiz-points" id="quiz-q-points">20 Points</span>
+                            </div>
+                            <h3 id="quiz-q-text">Which of the following describes the molecular transformation in a water synthesis reaction?</h3>
+                            
+                            <!-- Display for Interactive drag and drop or multiple choice -->
+                            <div id="quiz-interactive-area" class="quiz-interactive-area">
+                                <!-- Dynamic interactive components (e.g. Lewis structures to drag electrons to) -->
+                            </div>
+
+                            <div class="quiz-options-list" id="quiz-options-list">
+                                <!-- Buttons for choices will go here -->
+                            </div>
+
+                            <div class="quiz-feedback hidden" id="quiz-feedback-box">
+                                <div class="feedback-icon" id="quiz-feedback-icon">✓</div>
+                                <div class="feedback-text">
+                                    <h4 id="quiz-feedback-title">Correct!</h4>
+                                    <p id="quiz-feedback-desc">Great job. High energy ignition breaks the hydrogen-hydrogen bonds and oxygen-oxygen double bonds, leading to water molecules.</p>
+                                </div>
+                            </div>
+
+                            <div class="quiz-action-bar">
+                                <button class="btn btn-primary" id="btn-quiz-submit">Submit Answer</button>
+                                <button class="btn btn-secondary hidden" id="btn-quiz-next">Next Question</button>
+                            </div>
+                        </div>
+
+                        <div id="quiz-results" class="hidden">
+                            <div class="quiz-trophy">🏆</div>
+                            <h2 id="quiz-results-title">Quiz Completed!</h2>
+                            <p id="quiz-results-desc">You scored 80 out of 100 on the Acid-Base Neutralization module.</p>
+                            <button class="btn btn-glow" id="btn-quiz-restart">Try Again</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Application Javascript Files -->
+    <script src="reactions.js"></script>
+    <script src="energy-chart.js"></script>
+    <script src="physics-engine.js"></script>
+    <script src="quiz.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
